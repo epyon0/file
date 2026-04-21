@@ -1,0 +1,93 @@
+package file
+
+type fileSignature struct {
+	extension     []string
+	offset        int64
+	signatures    [][]byte
+	excludedBytes []int64
+	description   string
+}
+
+var signatureMap map[uint]fileSignature = map[uint]fileSignature{
+	0: {extension: []string{},
+		offset:      0,
+		signatures:  [][]byte{{0x23, 0x21}},
+		description: "Script or data to be passed to the program following the shebang (#!)"},
+	1: {extension: []string{"cwk"},
+		offset:      0,
+		signatures:  [][]byte{{0x02, 0x00, 0x5a, 0x57, 0x52, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}},
+		description: "Claris Works word processing doc"},
+	2: {extension: []string{"wk1"},
+		offset:      0,
+		signatures:  [][]byte{{0x00, 0x00, 0x02, 0x00, 0x06, 0x04, 0x06, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00}},
+		description: "Lotus 1-2-3 spreadsheet (v1) file"},
+	3: {extension: []string{"wk3"},
+		offset:      0,
+		signatures:  [][]byte{{0x00, 0x00, 0x1A, 0x00, 0x00, 0x10, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00}},
+		description: "Lotus 1-2-3 spreadsheet (v3) file"},
+	4: {extension: []string{"wk4", "wk5"},
+		offset:      0,
+		signatures:  [][]byte{{0x00, 0x00, 0x1A, 0x00, 0x02, 0x10, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00}},
+		description: "Lotus 1-2-3 spreadsheet (v4, v5) file"},
+	5: {extension: []string{"123"},
+		offset:      0,
+		signatures:  [][]byte{{0x00, 0x00, 0x1A, 0x00, 0x05, 0x10, 0x04}},
+		description: "Lotus 1-2-3 spreadsheet (v9) file"},
+	6: {extension: []string{},
+		offset:      0,
+		signatures:  [][]byte{{0x00, 0x00, 0x03, 0xF3}},
+		description: "Amiga Hunk executable file"},
+	7: {extension: []string{"qxd"},
+		offset:      0,
+		signatures:  [][]byte{{0x00, 0x00, 0x49, 0x49, 0x58, 0x50, 0x52}, {0x00, 0x00, 0x4D, 0x4D, 0x58, 0x50, 0x52}},
+		description: "Quark Express document"},
+	8: {extension: []string{"psafe3"},
+		offset:      0,
+		signatures:  [][]byte{{0x50, 0x57, 0x53, 0x33}},
+		description: "Password Gorilla Password Database"},
+	9: {extension: []string{"pcap"},
+		offset:      0,
+		signatures:  [][]byte{{0xD4, 0xC3, 0xB2, 0xA1}, {0xA1, 0xB2, 0xC3, 0xD4}},
+		description: "Libpcap File Format"},
+	10: {extension: []string{"pcap"},
+		offset:      0,
+		signatures:  [][]byte{{0x4D, 0x3C, 0xB2, 0xA1}, {0xA1, 0xB2, 0x3C, 0x4D}},
+		description: "Libpcap File Format (nanosecond-resolution)"},
+	11: {extension: []string{"pcapng"},
+		offset:      0,
+		signatures:  [][]byte{{0x0A, 0x0D, 0x0D, 0x0A}},
+		description: "PCAP Next Generation Dump File Format"},
+	12: {extension: []string{"rpm"},
+		offset:      0,
+		signatures:  [][]byte{{0xED, 0xAB, 0xEE, 0xDB}},
+		description: "RedHat Package Manager (RPM) package"},
+	13: {extension: []string{"sqlitedb", "sqlite", "db"},
+		offset:      0,
+		signatures:  [][]byte{{0x53, 0x51, 0x4C, 0x69, 0x74, 0x65, 0x20, 0x66, 0x6F, 0x72, 0x6D, 0x61, 0x74, 0x20, 0x33, 0x00}},
+		description: "SQLite Database"},
+	14: {extension: []string{"bin"},
+		offset:      0,
+		signatures:  [][]byte{{0x53, 0x50, 0x30, 0x31}},
+		description: "Amazon Kindle Update Package"},
+	15: {extension: []string{"was"},
+		offset:      0,
+		signatures:  [][]byte{{0x49, 0x57, 0x41, 0x44}},
+		description: "internal WAD (main resource file of Doom)"},
+	16: {extension: []string{"PIC", "PIF", "SEA", "YTR"},
+		offset:      0,
+		signatures:  [][]byte{{0x00}},
+		description: "IBM Storyboard bitmap file, Windows Program Information File, Mac Stuffit Self-Extracting Archive, IRIS OCR data file"},
+	17: {extension: []string{"PDB"},
+		offset:      11,
+		signatures:  [][]byte{{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}},
+		description: "PalmPilot Database/Document File"},
+}
+
+/*
+
+	n: {extension:   []string{},
+		offset:      0,
+		signatures:  [][]byte{{}},
+		description: ""},
+
+*/
